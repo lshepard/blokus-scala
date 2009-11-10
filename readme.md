@@ -45,7 +45,7 @@ It handles all transformations
 
 An individual piece in the game is implemented as a matrix of 0s and 1s.
 There are 21 distinct individual pieces. If you take into account all of
-their possible rotations there are around 70 different moves available.
+their possible rotations there are 91 different moves available.
 
     class Move(p: Piece, x: Int, y: Int)
 

@@ -1,5 +1,11 @@
 package blokus {
 
+/**
+ * Matrix represents a grid of numbers. This versatile class is the base for
+ * both the game board, individual pieces, and moves in the game. It
+ * handles all rotation, transposition, etc.
+ * 
+ */
 class Matrix(var m: Array[Array[Int]]) {
   m = fillout(m)
 
@@ -15,7 +21,17 @@ class Matrix(var m: Array[Array[Int]]) {
   def flipVertical: Matrix =
     translate(height, width,
 	      (i: Int, j: Int) => (height - i - 1, j))
+  
+  // derived rotations
+  def spin = flipVertical.flipHorizontal
+  def rotateRight = transpose.flipVertical
+  def rotateLeft = rotateRight.spin
 
+  /**
+   * Applies an (i, j) => (i, j) transformation to every
+   * element in a matrix. This is used to move the matrix
+   * into another position.
+   */
   def translate(h:Int, w:Int, f: (Int, Int) => (Int, Int)) = {
     var n = new Matrix(h, w);
     for (i <- 0 until height) {
@@ -42,9 +58,12 @@ class Matrix(var m: Array[Array[Int]]) {
   // where each character is a digit 0-9
   def this(rows : Array[String]) =
     this(
-      rows.map(
-	_.toCharArray.
-	filter(_.isDigit).map(_.toInt - '0'.toInt)))
+      rows.map(_.
+	toCharArray.
+	map(_.toInt - '0'.toInt)))
+
+  def this(rows: String *) =
+    this(rows.toArray)
 
   // Creates an array full of filler
   def this(h: Int, w: Int) =
@@ -63,7 +82,7 @@ class Matrix(var m: Array[Array[Int]]) {
   }
 
   override def toString: String =
-    m.map(_.mkString(" ")).mkString("\n") + "\n"
+    "[[" + m.map(_.mkString(", ")).mkString("]\n [") + "]]\n"
 
 }
 

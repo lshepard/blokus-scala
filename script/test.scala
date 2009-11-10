@@ -5,5 +5,6 @@
 import blokus.test._
 
 MatrixTest.run
+PieceTest.run
 
 Console.println("Done")

@@ -7,7 +7,7 @@ package blokus {
  * 
  */
 class Matrix(var m: Array[Array[Int]]) {
-  m = fillout(m)
+  m = fillout
 
   // flips it on its side
   def transpose: Matrix =
@@ -33,7 +33,7 @@ class Matrix(var m: Array[Array[Int]]) {
    * into another position.
    */
   def translate(h:Int, w:Int, f: (Int, Int) => (Int, Int)) = {
-    var n = new Matrix(h, w);
+    var n = new Matrix(h, w)
     for (i <- 0 until height) {
       for (j <- 0 until width) {
 	val point = f(i, j)
@@ -43,7 +43,27 @@ class Matrix(var m: Array[Array[Int]]) {
     n
   }
 
-  def fillout(m: Array[Array[Int]]) = {
+  /**
+   * Takes a new, smaller matrix and adds it into the existing
+   * one at the specified point. This is intended to apply
+   * a blokus move to a particular location, but it turns out
+   * to be useful in other ways as well.
+   *
+   * I'm sure there's an excellent way to write this using
+   * recursion, but I'm a little too lazy for that at the moment.
+   */
+  def add(minor: Matrix, x: Int, y: Int): Matrix = {
+    var n = new Matrix(m)
+ 
+    for (i <- 0 until minor.height) {
+      for (j <- 0 until minor.width) {
+	n.m(x + i)(y + j) = minor.m(i)(j) + m(x + i)(y + j)
+      }
+    }
+    n
+  }
+
+  def fillout = {
     val maxLength = m.map(_.length).reduceLeft(_.max(_))
     for(row <- m) yield {
       val tailList = 
@@ -53,6 +73,10 @@ class Matrix(var m: Array[Array[Int]]) {
       (row.toList ::: tailList).toArray
     }
   }
+
+  def substitute(from: Int, to: Int) =
+    m.map((row: Array[Int]) => row.map(
+      (x:Int) => if (x == from) to else x))
 
   // Accepts an array of strings,
   // where each character is a digit 0-9

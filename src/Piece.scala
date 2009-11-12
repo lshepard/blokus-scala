@@ -1,15 +1,15 @@
 package blokus {
 
 /**
- * A piece is just a specific matrix of 0s and 1s.
+ * A piece is just a specific matrix 0s of and 1s.
  */
-class Piece (m: Matrix) {
+class Piece (val m: Matrix) {
 
   def this(rows: String *) =
     this(new Matrix(rows.toArray.
 		    map((x:String) => x.replace(" ", "0").replace("+", "1"))))
 
-  def combos: Array[Piece] = {
+  def combos: Set[Piece] = {
     val flipped = m.flipVertical
     Set(m, 
 	m.rotateRight,
@@ -18,8 +18,11 @@ class Piece (m: Matrix) {
 	flipped,
 	flipped.rotateRight,
 	flipped.rotateLeft,
-	flipped.spin).map(new Piece(_)).toArray
+	flipped.spin).map(new Piece(_))
   }
+
+  def equals (that: Piece) = 
+    this.combos == that.combos
 
   override def toString: String =
     m.m.map(_.map(_ match {

@@ -8,7 +8,7 @@ package blokus.test {
       assert(new Matrix(2, 3) 
 	     == new Matrix(Array(Array(0, 0, 0),
 				 Array(0, 0, 0))))
-      
+
       assert(new Matrix(Array("555",
 			      "666666",
 			      "1"))
@@ -36,6 +36,16 @@ package blokus.test {
       assert(m.flipVertical == new Matrix(Array("34569",
 						"01239")))
       
+      // test adding matrices together
+
+      assert(new Matrix("101").add(new Matrix("2"),0,2)
+	     ==
+	     new Matrix("103"))
+
+      assert(new Matrix("001","001").add(new Matrix("2"),1,2)
+	     ==
+	     new Matrix("001","003"))
+
     }
   }
 }

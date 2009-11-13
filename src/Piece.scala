@@ -3,7 +3,7 @@ package blokus {
 /**
  * A piece is just a specific matrix 0s of and 1s.
  */
-class Piece (val m: Matrix) {
+class Piece (val matrix: Matrix) {
 
   def this(rows: String *) =
     this(new Matrix(rows.toArray.
@@ -14,22 +14,38 @@ class Piece (val m: Matrix) {
    * for isomorphic rotations.
    */ 
   def orientations: Set[Piece] = {
-    val flipped = m.flipVertical
-    Set(m, 
-	m.rotateRight,
-	m.rotateLeft,
-	m.spin,
+    val flipped = matrix.flipVertical
+    Set(matrix, 
+	matrix.rotateRight,
+	matrix.rotateLeft,
+	matrix.spin,
 	flipped,
 	flipped.rotateRight,
 	flipped.rotateLeft,
 	flipped.spin).map(new Piece(_))
+  }
+  
+  /**
+   * Returns the (x, y) coordinates of each
+   * of the positive cells within this piece.
+   * Allows callers to avoid looping through
+   * the double-layer array to do work.
+   */
+  def cells: List[Tuple2[Int, Int]] = {
+    var cells : List[Tuple2[Int, Int]] = List()
+    for (i <- 0 until matrix.height)
+      for (j <- 0 until matrix.width)
+	if (matrix.m(i)(j) > 0)
+	  cells = (i, j) :: cells
+
+    cells
   }
 
   def equals (that: Piece) = 
     this.orientations == that.orientations
 
   override def toString: String =
-    m.m.map(_.map(_ match {
+    matrix.m.map(_.map(_ match {
       case 0 => " "
       case 1 => "+"
       case _ => ""
@@ -108,6 +124,9 @@ object Piece {
 	      "+++",
 	      " + ")
     )
+
+  // convenient for testing
+  def single = new Piece("+")
 
 }
 

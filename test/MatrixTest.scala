@@ -38,8 +38,6 @@ package blokus.test {
       
       // test adding matrices together
 
-      println(new Matrix("101").insert(new Matrix("2"),0,2))
-
       assert(new Matrix("101").insert(new Matrix("2"),0,2)
 	     ==
 	     new Matrix("102"))

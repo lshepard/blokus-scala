@@ -56,7 +56,7 @@ class Matrix(var m: Array[Array[Int]]) {
     var n = new Matrix(m)
     for (i <- 0 until minor.height) {
       for (j <- 0 until minor.width) {
-	val replacement = (minor.m(i)(j))
+	val replacement = minor.m(i)(j)
 	  n.m(x + i)(y + j) = 
 	    if (replacement > 0 ) 
 	      replacement
@@ -76,6 +76,21 @@ class Matrix(var m: Array[Array[Int]]) {
       
       (row.toList ::: tailList).toArray
     }
+  }
+
+  /**
+   * Returns the (x, y) coordinates of each
+   * of the cells matching a color within this piece.
+   * Allows callers to avoid looping through
+   * the double-layer array to do work.
+   */
+  def cells(value: Int): List[Tuple2[Int, Int]] = {
+    var cells : List[Tuple2[Int, Int]] = List()
+    for (i <- 0 until height)
+      for (j <- 0 until width)
+	if (m(i)(j) == value)
+	  cells = (i, j) :: cells
+    cells
   }
 
   def substitute(from: Int, to: Int) =

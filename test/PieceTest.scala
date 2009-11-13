@@ -17,6 +17,13 @@ package blokus.test {
       assert(Piece.all.length == 21)
       assert(Piece.all.map(_.orientations.toList).reduceLeft(_ ::: _).toArray.length
 	     == 91)
+
+      val cells = new Piece("+++", " + ").cells
+      assert(cells.reverse == List((0, 0),
+				   (0, 1),
+				   (0, 2),
+				   (1, 1)))
+      
     }
   }
 }

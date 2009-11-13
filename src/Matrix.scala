@@ -52,12 +52,16 @@ class Matrix(var m: Array[Array[Int]]) {
    * I'm sure there's an excellent way to write this using
    * recursion, but I'm a little too lazy for that at the moment.
    */
-  def add(minor: Matrix, x: Int, y: Int): Matrix = {
+  def insert(minor: Matrix, x: Int, y: Int): Matrix = {
     var n = new Matrix(m)
- 
     for (i <- 0 until minor.height) {
       for (j <- 0 until minor.width) {
-	n.m(x + i)(y + j) = minor.m(i)(j) + m(x + i)(y + j)
+	val replacement = (minor.m(i)(j))
+	  n.m(x + i)(y + j) = 
+	    if (replacement > 0 ) 
+	      replacement
+	    else 
+              m(x + i)(y + j)
       }
     }
     n
@@ -75,8 +79,8 @@ class Matrix(var m: Array[Array[Int]]) {
   }
 
   def substitute(from: Int, to: Int) =
-    m.map((row: Array[Int]) => row.map(
-      (x:Int) => if (x == from) to else x))
+    new Matrix(m.map((row: Array[Int]) => row.map(
+	(x:Int) => if (x == from) to else x)))
 
   // Accepts an array of strings,
   // where each character is a digit 0-9

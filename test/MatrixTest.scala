@@ -38,13 +38,15 @@ package blokus.test {
       
       // test adding matrices together
 
-      assert(new Matrix("101").add(new Matrix("2"),0,2)
-	     ==
-	     new Matrix("103"))
+      println(new Matrix("101").insert(new Matrix("2"),0,2))
 
-      assert(new Matrix("001","001").add(new Matrix("2"),1,2)
+      assert(new Matrix("101").insert(new Matrix("2"),0,2)
 	     ==
-	     new Matrix("001","003"))
+	     new Matrix("102"))
+
+      assert(new Matrix("001","001").insert(new Matrix("2"),1,2)
+	     ==
+	     new Matrix("001","002"))
 
     }
   }

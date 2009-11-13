@@ -11,7 +11,7 @@ class Move (player: Player,
 	    val y: Int) {
    
   def matrix: Matrix =
-    new Matrix(piece.m.substitute(1, player.color))
+    piece.m.substitute(1, player.color)
 
 }
 

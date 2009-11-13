@@ -3,4 +3,4 @@
 # Compiles and runs the test suite.
 #
 
-fsc src/*.scala test/*.scala && scala script/test.scala
+scalac src/*.scala test/*.scala && scala script/test.scala

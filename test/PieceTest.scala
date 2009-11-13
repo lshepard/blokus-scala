@@ -4,8 +4,19 @@ package blokus.test {
 
   object PieceTest {
     def run {
-      assert(Pieces.all.length == 21)
-      assert(Pieces.allCombos.length == 91)
+/*
+ * not sure how to flatten lists yet
+      assert(new Piece("+++").orientations.toList.flatten
+	     == List(new Piece("+++"),
+		     new Piece("+",
+			       "+",
+			       "+")))
+*/
+
+      // check the lengths
+      assert(Piece.all.length == 21)
+      assert(Piece.all.map(_.orientations.toList).reduceLeft(_ ::: _).toArray.length
+	     == 91)
     }
   }
 }

@@ -7,9 +7,13 @@ class Piece (val m: Matrix) {
 
   def this(rows: String *) =
     this(new Matrix(rows.toArray.
-		    map((x:String) => x.replace(" ", "0").replace("+", "1"))))
+		    map((x:String) => x.replace("+", "1"))))
 
-  def combos: Set[Piece] = {
+  /**
+   * Calculates all possible orientations of this piece, normalized
+   * for isomorphic rotations.
+   */ 
+  def orientations: Set[Piece] = {
     val flipped = m.flipVertical
     Set(m, 
 	m.rotateRight,
@@ -22,7 +26,7 @@ class Piece (val m: Matrix) {
   }
 
   def equals (that: Piece) = 
-    this.combos == that.combos
+    this.orientations == that.orientations
 
   override def toString: String =
     m.m.map(_.map(_ match {
@@ -33,9 +37,8 @@ class Piece (val m: Matrix) {
 
 }
 
-object Pieces {
+object Piece {
   
-  def allCombos = all.map(_.combos.toList).reduceLeft(_ ::: _).toArray
 
   def all = Array(
     new Piece("+"),

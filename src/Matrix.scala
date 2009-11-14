@@ -84,13 +84,14 @@ class Matrix(var m: Array[Array[Int]]) {
    * Allows callers to avoid looping through
    * the double-layer array to do work.
    */
-  def cells(value: Int): List[Tuple2[Int, Int]] = {
-    var cells : List[Tuple2[Int, Int]] = List()
-    for (i <- 0 until height)
-      for (j <- 0 until width)
-	if (m(i)(j) == value)
-	  cells = (i, j) :: cells
-    cells
+  def cells: List[Tuple2[Int, Int]] = {
+    List.range(0, height).flatMap(
+      (i) => List.range(0, width).map(
+	(i, _)))
+  }
+
+  def cellsWithValue(value: Int): List[Tuple2[Int, Int]] = {
+    cells.filter((p:Tuple2[Int,Int]) => m(p._1)(p._2) == value)
   }
 
   def substitute(from: Int, to: Int) =

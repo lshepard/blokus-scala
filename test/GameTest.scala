@@ -18,10 +18,10 @@ package blokus.test {
 
       val board = new Board(3, 3)
 
-      val pieces = Array(new Piece("++"),
-			 new Piece("+"),
-			 new Piece("++",
-				   "+"))
+      val pieces = List(new Piece("++"),
+			new Piece("+"),
+			new Piece("++",
+				  "+"))
 
       val player1 = new Player(1, pieces)
       val player2 = new Player(2, pieces)

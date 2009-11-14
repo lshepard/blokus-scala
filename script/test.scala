@@ -7,6 +7,6 @@ import blokus.test._
 MatrixTest.run
 PieceTest.run
 BoardTest.run
-GameTest.run
+//GameTest.run
 
 Console.println("Done")

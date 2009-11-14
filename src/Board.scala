@@ -40,43 +40,36 @@ class Board (val matrix: Matrix) {
     // check for each piece, in each orientation, where
     // there is space for the piece on the board
 
-    // naive way: iterate through every possible spot
-    // on the board and check for location.
-    var moves : List[Move] = List()
-    for (set <- player.pieces.map(_.orientations)) yield {
-      set.map((piece: Piece) =>
-      for(i <- 0 until matrix.height)
-	for (j <- 0 until matrix.width) {
-	  val move = new Move(player, piece, i, j)
-	  if (isLegalMove(move))
-	    moves = move :: moves
-	  else
-	    null
-	})
+    val allPossiblePieces = player.pieces.flatMap(_.orientations)
+    val points = matrix.cells
+
+    def possibleMovesForPiece(piece: Piece) = {
+      points.map(new Move(player, piece, _)).filter(isLegalMove)
     }
-    moves    
+
+    // now take the cross product of these two
+    allPossiblePieces.flatMap(possibleMovesForPiece)
   }
 	      
   /**
    * Decide whether a given move is legal in the context of this board.
+   *
+   * Either it's the first move, in which case we have to go in a corner,
+   * or we need to make sure that it's NOT adjacent to itself,
+   * and that it touches on at least one corner.
+   *
+   * (For now, this function doesn't calculate the corner-to-self rule)
    */
-  def isLegalMove(move: Move) = {
-/*
-    println("------", move,
-	    "inbounds:", isItInBounds(move),
-	    "space:", isThereSpaceForMove(move),
-	    "not adjacent", !isAdjacentToSelf(move),
-	    "corner to self", isCornerToSelf(move),
-	    "is corner move", isCornerMove(move),
-	    "first move", isFirstMove(move))
-*/
-    if (isFirstMove(move))
+  def isLegalMove(move: Move) : Boolean = {
+    return !isAdjacentToSelf(move.cells, move.player.color)
+
+    if (isFirstMove(move)) {
       isCornerMove(move)
+    }
     else
-      isItInBounds(move) &&
-      isThereSpaceForMove(move) &&
-      !isAdjacentToSelf(move) &&
-      isCornerToSelf(move)
+      (isItInBounds(move) &&
+       isThereSpaceForMove(move) &&
+       !isAdjacentToSelf(move.cells, move.player.color))
   }
 
   /**
@@ -96,7 +89,7 @@ class Board (val matrix: Matrix) {
    */
   def isThereSpaceForMove(move: Move) : Boolean = {
     matrix.insert(move.piece.matrix.substitute(1, 99),
-		  move.x, move.y).substitute(99, 0) == matrix
+		  move.point._1, move.point._2).substitute(99, 0) == matrix
   }
 
   /**
@@ -113,63 +106,34 @@ class Board (val matrix: Matrix) {
    * Is this our first move of the game?
    */
   def isFirstMove(move: Move) : Boolean = {
-    matrix.cells(move.player.color).length == 0
+    matrix.cellsWithValue(move.player.color).length == 0
   }
 
-  /**
-   * Checks if the corner of this piece touches itself.
-   */
-  def isCornerToSelf(move: Move) : Boolean = {
-    // check for each bit on the board
-    // at least one of the pieces must be at the corner
+  def getAdjacentCells(p: Tuple2[Int, Int]) : List[Tuple2[Int, Int]] =
+    List((p._1    , p._2 - 1),
+	 (p._1    , p._2 + 1),
+	 (p._1 - 1,     p._2),
+	 (p._1 + 1,     p._2))
 
-    move.cells.foreach((cell: Tuple2[Int,Int]) => {
-      if (checkCorner(cell._1 + move.x,
-		      cell._2 + move.y,
-		      move.player.color))
-	return true
-    })
-    false
-  }
-  def checkCorner(x: Int, y: Int, color: Int) : Boolean = {
-    getCellValue(x - 1, y - 1) == color ||
-    getCellValue(x + 1, y - 1) == color ||
-    getCellValue(x - 1, y + 1) == color ||
-    getCellValue(x + 1, y + 1) == color
-  }
-  
   /**
    * Check if the move is adjacent to anything on the board.
    */
-  def isAdjacentToSelf(move: Move): Boolean = {
-    move.cells.foreach((cell: Tuple2[Int,Int]) => {
-      if (checkAdjacent(cell._1 + move.x,
-			cell._2 + move.y,
-			move.player.color))
-	return true
-    })
-    false
-  }
-
-  def checkAdjacent(x: Int, y: Int, color: Int): Boolean = {
-    getCellValue(x,     y - 1) == color ||
-    getCellValue(x,     y + 1) == color ||
-    getCellValue(x - 1, y    ) == color ||
-    getCellValue(x + 1, y    ) == color
-  }
-
+  def isAdjacentToSelf(cells: List[Tuple2[Int,Int]], color: Int): Boolean =
+    cells.flatMap(getAdjacentCells).
+      map(getCellValue(_) == 1).reduceLeft(_ || _)
+  
   /**
    * Get the value at the given cell. Handles array overbounds
    * and just returns null.
    */
-  def getCellValue(x: Int, y: Int) = {
-    if (x >= matrix.height ||
-	x < 0 ||
-	y >= matrix.width ||
-	y < 0)
+  def getCellValue(point: Tuple2[Int,Int]) = {
+    if (point._1 >= matrix.height ||
+	point._1 < 0 ||
+	point._2 >= matrix.width ||
+	point._2 < 0)
       0
     else
-      matrix.m(x)(y)
+      matrix.m(point._1)(point._2)
   }
     
   override def toString =

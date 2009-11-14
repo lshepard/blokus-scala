@@ -24,22 +24,6 @@ class Piece (val matrix: Matrix) {
 	flipped.rotateLeft,
 	flipped.spin).map(new Piece(_))
   }
-  
-  /**
-   * Returns the (x, y) coordinates of each
-   * of the positive cells within this piece.
-   * Allows callers to avoid looping through
-   * the double-layer array to do work.
-   */
-  def cells: List[Tuple2[Int, Int]] = {
-    var cells : List[Tuple2[Int, Int]] = List()
-    for (i <- 0 until matrix.height)
-      for (j <- 0 until matrix.width)
-	if (matrix.m(i)(j) > 0)
-	  cells = (i, j) :: cells
-
-    cells
-  }
 
   def equals (that: Piece) = 
     this.orientations == that.orientations
@@ -56,7 +40,7 @@ class Piece (val matrix: Matrix) {
 object Piece {
   
 
-  def all = Array(
+  def all = List(
     new Piece("+"),
     new Piece("++"),
 

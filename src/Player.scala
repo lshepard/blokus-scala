@@ -1,7 +1,7 @@
 package blokus {
 
 class Player (val color: Int,
-	      var pieces: Array[Piece]) {
+	      var pieces: List[Piece]) {
   
   def this(color: Int) =
     this(color, Piece.all)
@@ -15,7 +15,7 @@ class Player (val color: Int,
     var moves = board.possibleMoves(this)
     if (!moves.isEmpty) {
       val move = moves.head
-      pieces = pieces.toList.tail.toArray // rely on the ordering nature
+      pieces = pieces.tail // rely on the ordering nature
       move
     }
     else

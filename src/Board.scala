@@ -31,10 +31,6 @@ class Board (val matrix: Matrix) {
    * Calculate a list of all possible legal moves
    * for this player on this board.
    *
-   * I know, I'm sure there's a great way to do
-   * this recursively instead of iteratively.
-   * I'm just trying to get it to work and will
-   * change out the implementation later.
    */
   def possibleMoves(player: Player) : List[Move] = {
     // check for each piece, in each orientation, where
@@ -43,6 +39,10 @@ class Board (val matrix: Matrix) {
     val allPossiblePieces = player.pieces.flatMap(_.orientations)
     val points = matrix.cells
 
+    /**
+     * Get all legal moves for the specific piece out of all
+     * possible points on the board.
+     */
     def possibleMovesForPiece(piece: Piece) = {
       points.map(new Move(player, piece, _)).filter(isLegalMove)
     }
@@ -61,9 +61,8 @@ class Board (val matrix: Matrix) {
    * (For now, this function doesn't calculate the corner-to-self rule)
    */
   def isLegalMove(move: Move) : Boolean = {
-    return !isAdjacentToSelf(move.cells, move.player.color)
-
     if (isFirstMove(move)) {
+      isItInBounds(move) &&
       isCornerMove(move)
     }
     else
@@ -97,9 +96,9 @@ class Board (val matrix: Matrix) {
    */
   def isCornerMove(move: Move) : Boolean = {
     (move.x == 0 || 
-     move.x == matrix.height) &&
+     move.x == matrix.height - 1) &&
     (move.y == 0 ||
-     move.y == matrix.width)
+     move.y == matrix.width - 1)
   }
 
   /**

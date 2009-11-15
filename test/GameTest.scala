@@ -5,8 +5,7 @@ package blokus.test {
   object GameTest {
   
     def run { 
-//      testSmallGame
-      testFullGame
+      testSmallGame
     }
 
     /**
@@ -16,7 +15,8 @@ package blokus.test {
      */ 
     def testSmallGame {
 
-      val board = new Board(3, 3)
+      val board = new Board(new Matrix("1.",
+				       ".2"))
 
       val pieces = List(new Piece("++"),
 			new Piece("+"),
@@ -28,24 +28,7 @@ package blokus.test {
 
       val game = new Game(board, Array(player1, player2))
 
-      game.play
-    }
-
-    /**
-     * This runs a regulation-size game.
-     */
-    def testFullGame {
-
-      val board = new Board(20, 20)
-
-      var players = Array(new Player(1, Piece.all),
-			  new Player(2, Piece.all),
-			  new Player(3, Piece.all),
-			  new Player(4, Piece.all))
-
-      val game = new Game(board, players)
-
-      game.play
+      assert(game.gameOver)
     }
   }
 }

@@ -22,6 +22,9 @@ class Player (val color: Int,
       null
   }
 
+
+  override def toString =
+    "Player" + color + " with " + pieces.length + " pieces."
 }
 
 }

@@ -8,7 +8,7 @@ package blokus.test {
       testAdjacency
       testFirstMove
       testMoves
-//      testPossibleMoves 
+      testPossibleMoves 
     }
     def testAdjacency {
       val board = new Board(new Matrix("000",
@@ -147,9 +147,7 @@ package blokus.test {
       // three possible moves with this single piece
 
       assert(b2.isAdjacentToSelf(List((0,1)), 1))
-
-      // Still don't know why this doesn't pass
-      //      assert(b2.possibleMoves(one_piece_player).length == 1)
+      assert(b2.possibleMoves(one_piece_player).length == 1)
     }
   }
 }

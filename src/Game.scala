@@ -29,7 +29,6 @@ class Game (
     }
   }
 
-
   /**
    * Game is over when none of the players can make any more moves.
    */

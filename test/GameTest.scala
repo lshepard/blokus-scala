@@ -26,7 +26,7 @@ package blokus.test {
       val player1 = new Player(1, pieces)
       val player2 = new Player(2, pieces)
 
-      val game = new Game(board, Array(player1, player2))
+      val game = new Game(board, List(player1, player2))
 
       assert(game.gameOver)
     }

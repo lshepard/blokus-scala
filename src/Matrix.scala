@@ -9,39 +9,8 @@ package blokus {
 class Matrix(var m: Array[Array[Int]]) {
   m = fillout
 
-  // flips it on its side
-  def transpose: Matrix =
-    translate(width, height,
-	      (i: Int, j: Int) => (j, i))
-
-  def flipHorizontal: Matrix = 
-    translate(height, width,
-	      (i: Int, j: Int) => (i, width - j - 1))
-
-  def flipVertical: Matrix =
-    translate(height, width,
-	      (i: Int, j: Int) => (height - i - 1, j))
-  
-  // derived rotations
-  def spin = flipVertical.flipHorizontal
-  def rotateRight = transpose.flipVertical
-  def rotateLeft = rotateRight.spin
-
-  /**
-   * Applies an (i, j) => (i, j) transformation to every
-   * element in a matrix. This is used to move the matrix
-   * into another position.
-   */
-  def translate(h:Int, w:Int, f: (Int, Int) => (Int, Int)) = {
-    var n = new Matrix(h, w)
-    for (i <- 0 until height) {
-      for (j <- 0 until width) {
-	val point = f(i, j)
-	n.m(point._1)(point._2) = m(i)(j) 
-      }
-    }
-    n
-  }
+  def width = m(0).length
+  def height = m.length
 
   /**
    * Takes a new, smaller matrix and adds it into the existing
@@ -67,6 +36,9 @@ class Matrix(var m: Array[Array[Int]]) {
     n
   }
 
+  /**
+   * Turns uneven input into a rectangular matrix.
+   */
   def fillout = {
     val maxLength = m.map(_.length).reduceLeft(_.max(_))
     for(row <- m) yield {
@@ -98,25 +70,71 @@ class Matrix(var m: Array[Array[Int]]) {
     new Matrix(m.map((row: Array[Int]) => row.map(
 	(x:Int) => if (x == from) to else x)))
 
-  // Accepts an array of strings,
-  // where each character is a digit 0-9
+  /**
+   * Moves elements around within the matrix.
+   * 
+   * Applies an (i, j) => (i, j) transformation to every
+   * element in a matrix. This is the based used
+   * by all the other functions to flip, rotate, etc.
+   */
+  def translate(h:Int, w:Int, f: (Int, Int) => (Int, Int)) = {
+    var n = new Matrix(h, w)
+    for (i <- 0 until height) {
+      for (j <- 0 until width) {
+	val point = f(i, j)
+	n.m(point._1)(point._2) = m(i)(j) 
+      }
+    }
+    n
+  }
+
+  def transpose: Matrix = 
+    translate(width, height, (i: Int, j: Int) => (j, i))
+
+  def flipHorizontal: Matrix =
+    translate(height, width, (i: Int, j: Int) => (i, width - j - 1))
+
+  def flipVertical: Matrix =
+    translate(height, width, (i: Int, j: Int) => (height - i - 1, j))
+
+  def spin = flipVertical.flipHorizontal
+  def rotateRight = transpose.flipVertical
+  def rotateLeft = rotateRight.spin
+
+  ////////////////////////////////////////
+  // Constructors and overridden methods
+
+  /**
+   * Accepts the matrix in string format, for shorthand.
+   * For example:
+   * 
+   *   new Matrix(Array("0000","0000"))
+   *
+   */
   def this(rows : Array[String]) =
     this(
       rows.map(_.
 	toCharArray.
 	map(_.toInt - '0'.toInt)))
 
+  /**
+   * Even shorter way of specifying the above.
+   *
+   *  new Matrix("0000","0000")
+   *
+   */
   def this(rows: String *) =
     this(rows.toArray)
 
-  // Creates an array full of filler
+ /**
+  * Shorthand for new array of all zeros. For example:
+  *
+  *   new Matrix(2, 4)
+  */
   def this(h: Int, w: Int) =
     this(new Array[Array[Int]](h).
 	 map(_ => new Array[Int](w).
 	     map(_ => 0)))
-
-  def width = m(0).length
-  def height = m.length
 
   // Use the fact that Lists do equality right to delegate 
   def toLists = m.map(_.toList).toList

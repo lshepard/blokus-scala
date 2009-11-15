@@ -1,6 +1,5 @@
 package blokus {
 
-
 /**
  * A game is mutable, since it's whole point is to drive the whole thing and
  * maintain state throughout. Maybe if we want to later make it immutable,
@@ -8,7 +7,7 @@ package blokus {
  */
 class Game (
   var board: Board, 
-  val players: Array[Player]) {
+  val players: List[Player]) {
 
   /**
    * This plays out an entire game.
@@ -35,6 +34,5 @@ class Game (
   def gameOver = !players.exists(board.possibleMoves(_).length > 0)
 
 }
-
 
 }

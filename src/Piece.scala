@@ -1,7 +1,8 @@
 package blokus {
 
 /**
- * A piece is just a specific matrix 0s of and 1s.
+ * A piece is just a specific matrix 0s of and 1s. It represents
+ * a piece in the game at a specified orientation.
  */
 class Piece (val matrix: Matrix) {
 
@@ -39,7 +40,9 @@ class Piece (val matrix: Matrix) {
 
 object Piece {
   
-
+  /**
+   * A list of all 21 pieces in the official Blokus board game.
+   */
   def all = List(
     new Piece("+"),
     new Piece("++"),

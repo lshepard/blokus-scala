@@ -9,6 +9,7 @@ package blokus.test {
       testFirstMove
       testMoves
       testPossibleMoves 
+      testMultiplePlayers
     }
     def testAdjacency {
       val board = new Board(new Matrix("000",
@@ -148,6 +149,20 @@ package blokus.test {
 
       assert(b2.isAdjacentToSelf(List((0,1)), 1))
       assert(b2.possibleMoves(one_piece_player).length == 1)
+    }
+
+    /**
+     * Start off, player 1 has already moved top corner.
+     * Make sure that player2 can't also move there.
+     */
+    def testMultiplePlayers = {
+      val player1 = new Player(1, List(Piece.single))
+      val player2 = new Player(2, List(Piece.single))
+      val board = new Board(new Matrix("10","00"))
+
+      val m_bad = new Move(player2, Piece.single, (0,0))
+
+      assert(!board.isLegalMove(m_bad))
     }
   }
 }

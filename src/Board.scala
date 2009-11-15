@@ -24,7 +24,10 @@ class Board (val matrix: Matrix) {
    * Board object in return.
    */
   def makeMove(move: Move): Board = {
-    new Board(matrix.insert(move.matrix, move.x, move.y))
+    if (isLegalMove(move))
+      new Board(matrix.insert(move.matrix, move.x, move.y))
+    else
+      throw new Exception("Could not make that move")
   }
 
   /**
@@ -61,14 +64,12 @@ class Board (val matrix: Matrix) {
    * (For now, this function doesn't calculate the corner-to-self rule)
    */
   def isLegalMove(move: Move) : Boolean = {
-    if (isFirstMove(move)) {
-      isItInBounds(move) &&
+    isItInBounds(move) &&
+    isThereSpaceForMove(move) &&
+    (if (isFirstMove(move))
       isCornerMove(move)
-    }
     else
-      (isItInBounds(move) &&
-       isThereSpaceForMove(move) &&
-       !isAdjacentToSelf(move.cells, move.player.color))
+      !isAdjacentToSelf(move.cells, move.player.color))
   }
 
   /**
@@ -92,13 +93,15 @@ class Board (val matrix: Matrix) {
   }
 
   /**
-   * Are we in a corner and it's the start of the game?
+   * Does the move touch a corner?
    */
   def isCornerMove(move: Move) : Boolean = {
-    (move.x == 0 || 
-     move.x == matrix.height - 1) &&
-    (move.y == 0 ||
-     move.y == matrix.width - 1)
+    move.cells.map((point: Tuple2[Int,Int]) =>
+      (point._1 == 0 ||
+       point._1 == matrix.height - 1) &&
+      (point._2 == 0 ||
+       point._2 == matrix.width - 1)).
+    reduceLeft(_ || _)
   }
 
   /**

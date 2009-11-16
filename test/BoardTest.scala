@@ -16,22 +16,22 @@ package blokus.test {
 				       "100",
 				       "000"))
 
-      assert(board.getAdjacentCells((2,2)) ==
-	List((2, 1),
-	     (2, 3),
-	     (1, 2),
-	     (3, 2)))
+      assert(board.getAdjacentCells(Cell(2,2)) ==
+	Cell.list((2, 1),
+		  (2, 3),
+		  (1, 2),
+		  (3, 2)))
 
-      assert( board.isAdjacentToSelf(List((0, 0)), 1))
-      assert( board.isAdjacentToSelf(List((1, 1)), 1))
-      assert(!board.isAdjacentToSelf(List((1, 2)), 1))
+      assert( board.isAdjacentToSelf(List(Cell(0, 0)), 1))
+      assert( board.isAdjacentToSelf(List(Cell(1, 1)), 1))
+      assert(!board.isAdjacentToSelf(List(Cell(1, 2)), 1))
       
       // test multiples
-      assert( board.isAdjacentToSelf(List((1, 1),
-					  (1, 2)), 1))
+      assert( board.isAdjacentToSelf(List(Cell(1, 1),
+					  Cell(1, 2)), 1))
 
-      assert(! board.isAdjacentToSelf(List((2, 1),
-					  (2, 2)), 1))
+      assert(! board.isAdjacentToSelf(List(Cell(2, 1),
+					   Cell(2, 2)), 1))
     }
 
     def testFirstMove = {
@@ -147,7 +147,7 @@ package blokus.test {
       // now that we're in the top left corner, there are only
       // three possible moves with this single piece
 
-      assert(b2.isAdjacentToSelf(List((0,1)), 1))
+      assert(b2.isAdjacentToSelf(List(Cell(0,1)), 1))
       assert(b2.possibleMoves(one_piece_player).length == 1)
     }
 

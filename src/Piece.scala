@@ -13,8 +13,8 @@ class Piece (val matrix: Matrix) {
   /**
    * Calculates all possible orientations of this piece, normalized
    * for isomorphic rotations.
-   */ 
-  def orientations: Set[Piece] = {
+   */
+  def orientations: List[Piece] = {
     val flipped = matrix.flipVertical
     Set(matrix, 
 	matrix.rotateRight,
@@ -23,12 +23,14 @@ class Piece (val matrix: Matrix) {
 	flipped,
 	flipped.rotateRight,
 	flipped.rotateLeft,
-	flipped.spin).map(new Piece(_))
+	flipped.spin).map(new Piece(_)).toList
   }
-
-  def equals (that: Piece) = 
-    this.orientations == that.orientations
-
+/*
+  override def equals (that: Any): Boolean = that match {
+    case that: Piece => (this.orientations == that.orientations)
+    case _ => false
+  }
+*/
   override def toString: String =
     matrix.m.map(_.map(_ match {
       case 0 => " "

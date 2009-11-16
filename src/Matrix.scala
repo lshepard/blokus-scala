@@ -56,14 +56,14 @@ class Matrix(var m: Array[Array[Int]]) {
    * Allows callers to avoid looping through
    * the double-layer array to do work.
    */
-  def cells: List[Tuple2[Int, Int]] = {
+  def cells: List[Cell] = {
     List.range(0, height).flatMap(
       (i) => List.range(0, width).map(
-	(i, _)))
+	Cell(i, _)))
   }
 
-  def cellsWithValue(value: Int): List[Tuple2[Int, Int]] = {
-    cells.filter((p:Tuple2[Int,Int]) => m(p._1)(p._2) == value)
+  def cellsWithValue(value: Int): List[Cell] = {
+    cells.filter((p:Cell) => m(p.x)(p.y) == value)
   }
 
   def substitute(from: Int, to: Int) =
@@ -135,6 +135,16 @@ class Matrix(var m: Array[Array[Int]]) {
     this(new Array[Array[Int]](h).
 	 map(_ => new Array[Int](w).
 	     map(_ => 0)))
+
+  def value(cell: Cell, default: Int) = {
+    if (cell.x >= height ||
+	cell.x < 0 ||
+	cell.y >= width ||
+	cell.y < 0)
+      default
+    else
+      m(cell.x)(cell.y)
+  }
 
   // Use the fact that Lists do equality right to delegate 
   def toLists = m.map(_.toList).toList

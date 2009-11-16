@@ -1,7 +1,7 @@
 package blokus {
 
 /**
- * Represents the state of the board at any given point.
+ * Represents the state of the board at any given cell.
  * Handles all the aspects of making and checking moves
  * for validity.
  *
@@ -40,20 +40,20 @@ class Board (val matrix: Matrix) {
     // there is space for the piece on the board
 
     val allPossiblePieces = player.pieces.flatMap(_.orientations)
-    val points = matrix.cells
+    val cells = matrix.cells
 
     /**
      * Get all legal moves for the specific piece out of all
-     * possible points on the board.
+     * possible cells on the board.
      */
     def possibleMovesForPiece(piece: Piece) = {
-      points.map(new Move(player, piece, _)).filter(isLegalMove)
+      cells.map(new Move(player, piece, _)).filter(isLegalMove)
     }
 
     // now take the cross product of these two
     allPossiblePieces.flatMap(possibleMovesForPiece)
   }
-	      
+
   /**
    * Decide whether a given move is legal in the context of this board.
    *
@@ -89,18 +89,18 @@ class Board (val matrix: Matrix) {
    */
   def isThereSpaceForMove(move: Move) : Boolean = {
     matrix.insert(move.piece.matrix.substitute(1, 99),
-		  move.point._1, move.point._2).substitute(99, 0) == matrix
+		  move.cell._1, move.cell._2).substitute(99, 0) == matrix
   }
 
   /**
    * Does the move touch a corner?
    */
   def isCornerMove(move: Move) : Boolean = {
-    move.cells.map((point: Tuple2[Int,Int]) =>
-      (point._1 == 0 ||
-       point._1 == matrix.height - 1) &&
-      (point._2 == 0 ||
-       point._2 == matrix.width - 1)).
+    move.cells.map((cell: Cell) =>
+      (cell.x == 0 ||
+       cell.x == matrix.height - 1) &&
+      (cell.y == 0 ||
+       cell.y == matrix.width - 1)).
     reduceLeft(_ || _)
   }
 
@@ -111,16 +111,16 @@ class Board (val matrix: Matrix) {
     matrix.cellsWithValue(move.player.color).length == 0
   }
 
-  def getAdjacentCells(p: Tuple2[Int, Int]) : List[Tuple2[Int, Int]] =
-    List((p._1    , p._2 - 1),
-	 (p._1    , p._2 + 1),
-	 (p._1 - 1,     p._2),
-	 (p._1 + 1,     p._2))
+  def getAdjacentCells(p: Cell) : List[Cell] =
+    List(Cell(p.x    , p.y - 1),
+	 Cell(p.x    , p.y + 1),
+	 Cell(p.x - 1,     p.y),
+	 Cell(p.x + 1,     p.y))
 
   /**
    * Check if the move is adjacent to anything on the board.
    */
-  def isAdjacentToSelf(cells: List[Tuple2[Int,Int]], color: Int): Boolean =
+  def isAdjacentToSelf(cells: List[Cell], color: Int): Boolean =
     cells.flatMap(getAdjacentCells).
       map(getCellValue(_) == 1).reduceLeft(_ || _)
   
@@ -128,16 +128,10 @@ class Board (val matrix: Matrix) {
    * Get the value at the given cell. Handles array overbounds
    * and just returns null.
    */
-  def getCellValue(point: Tuple2[Int,Int]) = {
-    if (point._1 >= matrix.height ||
-	point._1 < 0 ||
-	point._2 >= matrix.width ||
-	point._2 < 0)
-      0
-    else
-      matrix.m(point._1)(point._2)
+  def getCellValue(cell: Cell) = {
+    matrix.value(cell, 0)
   }
-    
+
   override def toString =
     matrix.m.map(_.map((x:Int) => x match {
       case 0 => "."

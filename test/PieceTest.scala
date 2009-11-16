@@ -19,10 +19,11 @@ package blokus.test {
 	     == 91)
 
       val cells = new Piece("+++", " + ").matrix.cellsWithValue(1)
-      assert(cells == List((0, 0),
-			   (0, 1),
-			   (0, 2),
-			   (1, 1)))
+      println(cells)
+      assert(cells == Cell.list((0, 0),
+				(0, 1),
+				(0, 2),
+				(1, 1)))
       
     }
   }

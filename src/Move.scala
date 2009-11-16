@@ -7,10 +7,13 @@ package blokus {
  */
 class Move (val player: Player, 
 	    val piece: Piece, 
-	    val point: Tuple2[Int,Int]) {
+	    val cell: Cell) {
 
-  def x: Int = point._1
-  def y: Int = point._2
+  def this(player: Player, piece: Piece, tuple: Tuple2[Int,Int]) =
+    this(player, piece, Cell(tuple))
+
+  def x: Int = cell.x
+  def y: Int = cell.y
    
   def matrix: Matrix =
     piece.matrix.substitute(1, player.color)
@@ -21,10 +24,10 @@ class Move (val player: Player,
    * This means taking the cells of the piece - which are origined
    * at (0,0), and translating to the origin of the given point.
    */
-  def cells : List[Tuple2[Int,Int]] = {
+  def cells : List[Cell] = {
     piece.matrix.cellsWithValue(1).map(
-      (p: Tuple2[Int,Int]) => {
-	(p._1 + point._1, p._2 + point._2)
+      (p: Cell) => {
+	Cell(p.x + cell.x, p.y + cell.y)
       })
   }
 

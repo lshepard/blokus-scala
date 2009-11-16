@@ -16,11 +16,6 @@ package blokus.test {
 				       "100",
 				       "000"))
 
-      assert(board.getAdjacentCells(Cell(2,2)) ==
-	Cell.list((2, 1),
-		  (2, 3),
-		  (1, 2),
-		  (3, 2)))
 
       assert( board.isAdjacentToSelf(List(Cell(0, 0)), 1))
       assert( board.isAdjacentToSelf(List(Cell(1, 1)), 1))

@@ -111,26 +111,13 @@ class Board (val matrix: Matrix) {
     matrix.cellsWithValue(move.player.color).length == 0
   }
 
-  def getAdjacentCells(p: Cell) : List[Cell] =
-    List(Cell(p.x    , p.y - 1),
-	 Cell(p.x    , p.y + 1),
-	 Cell(p.x - 1,     p.y),
-	 Cell(p.x + 1,     p.y))
-
   /**
    * Check if the move is adjacent to anything on the board.
    */
   def isAdjacentToSelf(cells: List[Cell], color: Int): Boolean =
-    cells.flatMap(getAdjacentCells).
-      map(getCellValue(_) == 1).reduceLeft(_ || _)
-  
-  /**
-   * Get the value at the given cell. Handles array overbounds
-   * and just returns null.
-   */
-  def getCellValue(cell: Cell) = {
-    matrix.value(cell, 0)
-  }
+    cells.flatMap(_.neighbors).
+      map(matrix.value(_,0) == 1).
+      reduceLeft(_ || _)
 
   override def toString =
     matrix.m.map(_.map((x:Int) => x match {

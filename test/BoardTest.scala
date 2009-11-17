@@ -7,6 +7,7 @@ package blokus.test {
     def run { 
       testAdjacency
       testFirstMove
+      testCornerCheck
       testMoves
       testPossibleMoves 
       testMultiplePlayers
@@ -27,6 +28,20 @@ package blokus.test {
 
       assert(! board.isAdjacentToSelf(List(Cell(2, 1),
 					   Cell(2, 2)), 1))
+    }
+
+    def testCornerCheck = {
+      
+      val b = new Board(new Matrix("000",
+				   "100",
+				   "000"))
+ 
+      assert(b.isCornerToSelf(new Move(new Player(1),
+				       Piece.single,
+				       (2,1))))
+      assert(!b.isCornerToSelf(new Move(new Player(1),
+				     Piece.single,
+				     (2,2))))
     }
 
     def testFirstMove = {

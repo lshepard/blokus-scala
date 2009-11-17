@@ -4,14 +4,6 @@ package blokus.test {
 
   object PieceTest {
     def run {
-/*
- * not sure how to flatten lists yet
-      assert(new Piece("+++").orientations.toList.flatten
-	     == List(new Piece("+++"),
-		     new Piece("+",
-			       "+",
-			       "+")))
-*/
 
       // check the lengths
       assert(Piece.all.length == 21)
@@ -24,6 +16,14 @@ package blokus.test {
 				(0, 2),
 				(1, 1)))
       
+      val piece = new Piece("+++",
+			    "+")
+
+      assert(piece.corners == List(Cell(-1, -1),
+				   Cell(-1, 3),
+				   Cell(1, 3),
+				   Cell(2, -1),
+				   Cell(2, 1)))
     }
   }
 }

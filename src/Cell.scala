@@ -11,11 +11,18 @@ class Cell (val tuple: Tuple2[Int,Int]) {
   def _1 = tuple._1
   def _2 = tuple._2
 
-  def neighbors : List[Cell] = 
-    Cell.list((x - 1, y),
-	      (x + 1, y),
-	      (x, y - 1),
-	      (x, y + 1))
+  def neighbors : List[Cell] =
+    List(toTop, toBottom, toLeft, toRight)
+
+  def toLeft: Cell   = Cell(x, y - 1)
+  def toRight: Cell  = Cell(x, y + 1)
+  def toTop: Cell    = Cell(x - 1, y)
+  def toBottom: Cell = Cell(x + 1, y)
+
+  def shift(upperLeftCell: Cell) = {
+    Cell(upperLeftCell.x + x,
+	 upperLeftCell.y + y)
+  }
 
   override def equals(that: Any): Boolean = that match {
     case that: Cell => (this.tuple == that.tuple)

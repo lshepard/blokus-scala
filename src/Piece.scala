@@ -25,12 +25,49 @@ class Piece (val matrix: Matrix) {
 	flipped.rotateLeft,
 	flipped.spin).map(new Piece(_)).toList
   }
-/*
-  override def equals (that: Any): Boolean = that match {
-    case that: Piece => (this.orientations == that.orientations)
-    case _ => false
+
+  /**
+   * Returns the corners of this piece.
+   */
+  def corners: List[Cell] = {
+
+    /**
+     * Okay, for a given cell, we will determine
+     * if any of its surrounding pieces are a corner.
+     * Do this by comparing each of its unoccupied
+     * adjacent cells against other adjacent unoccupied
+     * neighbors.
+     */
+    def cornersForCell(cell: Cell) = {
+      val emptyNeighbors = cell.neighbors.filter(!matrix.present(_))
+      emptyNeighbors.flatMap((cell1: Cell) =>
+	for (cell2 <- emptyNeighbors;
+	     if (cell2 != cell1 &&
+		 cell1.x == cell.x && // de-dupe
+		 cell2.x != cell1.x &&
+		 cell2.y != cell1.y &&
+		 ((cell2.x - cell1.x).abs + // no more than one square away
+		  (cell2.y - cell1.y).abs == 2)
+	       ))
+	  yield new Cell(cell2.x, cell1.y)
+	  );
+    }
+
+    cells.flatMap(cornersForCell)
   }
-*/
+
+  /*
+   * Get the cells that make up this piece.
+   */
+  def cells: List[Cell] = matrix.cells.filter(matrix.present(_))
+
+  /**
+   * Prints out a representation of this with the cells marked as "2"
+   */
+  def cellsToString(cells: List[Cell]): String =
+    matrix.pad(1).insertCells(cells.map((cell: Cell) =>
+      Cell(cell.x + 1, cell.y + 1)), 2).toString
+
   override def toString: String =
     matrix.m.map(_.map(_ match {
       case 0 => " "

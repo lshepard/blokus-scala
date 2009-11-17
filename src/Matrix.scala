@@ -50,6 +50,22 @@ class Matrix(var m: Array[Array[Int]]) {
     }
   }
 
+  def insertCells(cells: List[Cell], value: Int): Matrix = {
+    var n = new Matrix(m)
+    cells.foreach((cell) =>
+      n.set(cell, value))
+    n
+  }
+
+  /*
+   * Add a number of padding cells around the edge of the matrix.
+   */
+  def pad(padding: Int) =
+    translate(padding * 2 + height, padding * 2 + width,
+	      (i: Int, j: Int) => {
+		(i + padding, j + padding)
+	      })
+
   /**
    * Returns the (x, y) coordinates of each
    * of the cells matching a color within this piece.
@@ -82,7 +98,7 @@ class Matrix(var m: Array[Array[Int]]) {
     for (i <- 0 until height) {
       for (j <- 0 until width) {
 	val point = f(i, j)
-	n.m(point._1)(point._2) = m(i)(j) 
+	n.m(point._1)(point._2) = m(i)(j)
       }
     }
     n
@@ -135,6 +151,21 @@ class Matrix(var m: Array[Array[Int]]) {
     this(new Array[Array[Int]](h).
 	 map(_ => new Array[Int](w).
 	     map(_ => 0)))
+
+  
+  
+  def present(cell: Cell): Boolean = value(cell, 0) == 1
+  
+  def set(cell: Cell, value: Int): Boolean = 
+    if (cell.x >= height ||
+	cell.x < 0 ||
+	cell.y >= width ||
+	cell.y < 0)
+      false
+    else {
+      m(cell.x)(cell.y) = value
+      true
+    }
 
   def value(cell: Cell, default: Int) = {
     if (cell.x >= height ||

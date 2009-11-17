@@ -46,6 +46,17 @@ package blokus.test {
 	     ==
 	     new Matrix("001","002"))
 
+      assert(new Matrix("001","000").insertCells(
+	List(Cell(0,0), Cell(1, 1)), 2)
+	     ==
+	       new Matrix("201","020"))
+
+      assert(new Matrix("123","456").pad(1) ==
+	new Matrix("00000",
+		   "01230",
+		   "04560",
+		   "00000"))
+
     }
   }
 }

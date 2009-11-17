@@ -1,7 +1,7 @@
 package blokus {
 
 class Player (val color: Int,
-	      var pieces: List[Piece]) {
+	      var pieces: Set[Piece]) {
   
   def this(color: Int) =
     this(color, Piece.all)
@@ -13,18 +13,30 @@ class Player (val color: Int,
    */
   def nextMove(board: Board): Move = {
     var moves = board.possibleMoves(this)
-    if (!moves.isEmpty) {
-      val move = moves.head
-      pieces = pieces.tail // rely on the ordering nature
+    if (moves.isEmpty)
+      null
+    else {
+      val move = chooseMove(moves)
+      // remove the piece
+      pieces = pieces - move.piece
       move
     }
-    else
-      null
   }
 
+  /**
+   * This is the method that other players will have to override.
+   * You get a list of all possible moves, and it's up to you to
+   * sort through them.
+   *
+   * The default implementation just chooses one randomly.
+   */
+  def chooseMove(moves: List[Move]) = {
+    val rng = new util.Random()
+    moves(rng.nextInt(moves.length))
+  }
 
   override def toString =
-    "Player" + color + " with " + pieces.length + " pieces."
+    "Player" + color + " with " + pieces.size + " pieces."
 }
 
 }

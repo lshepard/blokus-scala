@@ -34,6 +34,8 @@ class Board (val matrix: Matrix) {
    * Calculate a list of all possible legal moves
    * for this player on this board.
    *
+   * This is not the most efficient implementation.
+   *
    */
   def possibleMoves(player: Player) : List[Move] = {
     // check for each piece, in each orientation, where
@@ -51,7 +53,7 @@ class Board (val matrix: Matrix) {
     }
 
     // now take the cross product of these two
-    allPossiblePieces.flatMap(possibleMovesForPiece)
+    allPossiblePieces.toList.flatMap(possibleMovesForPiece)
   }
 
   /**
@@ -69,7 +71,8 @@ class Board (val matrix: Matrix) {
     (if (isFirstMove(move))
       isCornerMove(move)
     else
-      !isAdjacentToSelf(move.cells, move.player.color))
+      !isAdjacentToSelf(move.cells, move.player.color) &&
+       isCornerToSelf(move))
   }
 
   /**

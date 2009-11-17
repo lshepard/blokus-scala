@@ -6,9 +6,11 @@ package blokus.test {
     def run {
 
       // check the lengths
-      assert(Piece.all.length == 21)
-      assert(Piece.all.map(_.orientations.toList).reduceLeft(_ ::: _).toArray.length
-	     == 91)
+      assert(Piece.all.size == 21)
+
+      println(Piece.all.toList.flatMap(_.orientations).size)
+      println(Piece.all.flatMap(_.orientations).mkString("\n\n"))
+
 
       val cells = new Piece("+++", " + ").matrix.cellsWithValue(1)
       assert(cells == Cell.list((0, 0),
@@ -24,6 +26,34 @@ package blokus.test {
 				   Cell(1, 3),
 				   Cell(2, -1),
 				   Cell(2, 1)))
+
+      assert(  new Piece("+++",
+			 "+")
+	     == 
+	       new Piece("+++",
+			 "+"))
+
+      var pieces = Set(new Piece("+++",
+				 "+"),
+		       new Piece("+++",
+				 "  +"))
+      println(pieces)
+      assert(pieces.size == 1)
+
+      pieces = Set(new Piece("+++",
+			     "+"),
+		   new Piece("+++++"),
+		   new Piece("+++",
+			     "+ +"))
+
+      // notice that we are subtracting a rotated version
+      assert(pieces - new Piece("+",
+				"+",
+				"++")
+	     ==
+	       Set(new Piece("+++++"),
+		   new Piece("+++",
+			     "+ +")))
     }
   }
 }

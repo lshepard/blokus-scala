@@ -5,16 +5,19 @@ package blokus {
  * a piece in the game at a specified orientation.
  */
 class Piece (val matrix: Matrix) {
-
+  val allRotations = calculateOrientations
+  
   def this(rows: String *) =
     this(new Matrix(rows.toArray.
-		    map((x:String) => x.replace("+", "1"))))
+		    map((x:String) => x.
+			replace("+", "1").
+			replace(" ", "0"))))
 
   /**
    * Calculates all possible orientations of this piece, normalized
    * for isomorphic rotations.
    */
-  def orientations: List[Piece] = {
+  private def calculateOrientations: Set[Matrix] = {
     val flipped = matrix.flipVertical
     Set(matrix, 
 	matrix.rotateRight,
@@ -23,8 +26,10 @@ class Piece (val matrix: Matrix) {
 	flipped,
 	flipped.rotateRight,
 	flipped.rotateLeft,
-	flipped.spin).map(new Piece(_)).toList
+	flipped.spin)
   }
+
+  def orientations: Set[Piece] = allRotations.map(new Piece(_))
 
   /**
    * Returns the corners of this piece.
@@ -68,6 +73,17 @@ class Piece (val matrix: Matrix) {
     matrix.pad(1).insertCells(cells.map((cell: Cell) =>
       Cell(cell.x + 1, cell.y + 1)), 2).toString
 
+  /**
+   * Equality is defined by 
+   */
+  override def hashCode: Int = {
+    allRotations.toString.hashCode
+  }
+  override def equals(that: Any) : Boolean = that match {
+    case that: Piece => (this.allRotations.toString == that.allRotations.toString)
+    case _ => false
+  }
+
   override def toString: String =
     matrix.m.map(_.map(_ match {
       case 0 => " "
@@ -82,7 +98,7 @@ object Piece {
   /**
    * A list of all 21 pieces in the official Blokus board game.
    */
-  def all = List(
+  def all = Set(
     new Piece("+"),
     new Piece("++"),
 

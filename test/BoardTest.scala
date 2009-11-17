@@ -11,6 +11,7 @@ package blokus.test {
       testMoves
       testPossibleMoves 
       testMultiplePlayers
+      testComplexBoard
     }
     def testAdjacency {
       val board = new Board(new Matrix("000",
@@ -134,7 +135,7 @@ package blokus.test {
 
       // If we only have a single player with a one-piece,
       // then it should only have 4 possible moves
-      val one_piece_player = new Player(1, List(Piece.single))
+      val one_piece_player = new Player(1, Set(Piece.single))
       val b = new Board(2, 2)
       
       assert(b.possibleMoves(one_piece_player).length == 4)
@@ -142,7 +143,7 @@ package blokus.test {
       // now, i'm adding a 4-block piece. in this arrangement,
       // there should be 5 moves - the original 4, plus the
       // only one possible with the new one
-      val two_piece_player = new Player(2, List(Piece.single,
+      val two_piece_player = new Player(2, Set(Piece.single,
 						 new Piece("++",
 							   "++")))
 
@@ -166,12 +167,26 @@ package blokus.test {
      * Make sure that player2 can't also move there.
      */
     def testMultiplePlayers = {
-      val player1 = new Player(1, List(Piece.single))
-      val player2 = new Player(2, List(Piece.single))
+      val player1 = new Player(1, Set(Piece.single))
+      val player2 = new Player(2, Set(Piece.single))
       val board = new Board(new Matrix("10","00"))
 
       val m_bad = new Move(player2, Piece.single, (0,0))
 
+      assert(!board.isLegalMove(m_bad))
+    }
+
+    def testComplexBoard = {
+      val board = new Board(new Matrix("2220001",
+				       "2000111",
+				       "0000000"))
+
+      val player1 = new Player(1, Set(new Piece("++")))
+      val player2 = new Player(1, Set(new Piece("++",
+						"+")))
+
+      // the move is bad because it doesn't satisfy corner adjacency
+      val m_bad = new Move(player1, new Piece("++"), (1,1))
       assert(!board.isLegalMove(m_bad))
     }
   }

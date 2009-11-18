@@ -4,6 +4,8 @@
 
 import blokus.test._
 
+Console.println("Starting...")
+
 MatrixTest.run
 PieceTest.run
 CellTest.run

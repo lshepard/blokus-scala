@@ -44,7 +44,9 @@ class Piece (val matrix: Matrix) {
      * neighbors.
      */
     def cornersForCell(cell: Cell) = {
-      val emptyNeighbors = cell.neighbors.filter(!matrix.present(_))
+      val emptyNeighbors = cell.neighbors.
+        filter(matrix.value(_,0) == 0)
+
       emptyNeighbors.flatMap((cell1: Cell) =>
 	for (cell2 <- emptyNeighbors;
 	     if (cell2 != cell1 &&
@@ -64,7 +66,7 @@ class Piece (val matrix: Matrix) {
   /*
    * Get the cells that make up this piece.
    */
-  def cells: List[Cell] = matrix.cells.filter(matrix.present(_))
+  def cells: List[Cell] = matrix.cells.filter(matrix.value(_,0) == 1)
 
   /**
    * Prints out a representation of this with the cells marked as "2"
@@ -76,11 +78,9 @@ class Piece (val matrix: Matrix) {
   /**
    * Equality is defined by 
    */
-  override def hashCode: Int = {
-    allRotations.toString.hashCode
-  }
+  override def hashCode: Int = allRotations.hashCode
   override def equals(that: Any) : Boolean = that match {
-    case that: Piece => (this.allRotations.toString == that.allRotations.toString)
+    case that: Piece => (this.allRotations == that.allRotations)
     case _ => false
   }
 

@@ -8,10 +8,6 @@ package blokus.test {
       // check the lengths
       assert(Piece.all.size == 21)
 
-      println(Piece.all.toList.flatMap(_.orientations).size)
-      println(Piece.all.flatMap(_.orientations).mkString("\n\n"))
-
-
       val cells = new Piece("+++", " + ").matrix.cellsWithValue(1)
       assert(cells == Cell.list((0, 0),
 				(0, 1),
@@ -37,7 +33,6 @@ package blokus.test {
 				 "+"),
 		       new Piece("+++",
 				 "  +"))
-      println(pieces)
       assert(pieces.size == 1)
 
       pieces = Set(new Piece("+++",

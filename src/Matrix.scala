@@ -151,10 +151,6 @@ class Matrix(var m: Array[Array[Int]]) {
     this(new Array[Array[Int]](h).
 	 map(_ => new Array[Int](w).
 	     map(_ => 0)))
-
-  
-  
-  def present(cell: Cell): Boolean = value(cell, 0) == 1
   
   def set(cell: Cell, value: Int): Boolean = 
     if (cell.x >= height ||
@@ -167,7 +163,7 @@ class Matrix(var m: Array[Array[Int]]) {
       true
     }
 
-  def value(cell: Cell, default: Int) = {
+  def value(cell: Cell, default: Int): Int = {
     if (cell.x >= height ||
 	cell.x < 0 ||
 	cell.y >= width ||
@@ -179,10 +175,12 @@ class Matrix(var m: Array[Array[Int]]) {
 
   // Use the fact that Lists do equality right to delegate 
   def toLists = m.map(_.toList).toList
+  override def hashCode: Int = toLists.hashCode
   override def equals(that: Any): Boolean = that match {
       case that: Matrix => (this.toLists == that.toLists)
       case _ => false
   }
+
 
   override def toString: String =
     "[[" + m.map(_.mkString(", ")).mkString("]\n [") + "]]\n"

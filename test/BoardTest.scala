@@ -29,6 +29,16 @@ package blokus.test {
 
       assert(! board.isAdjacentToSelf(List(Cell(2, 1),
 					   Cell(2, 2)), 1))
+
+      val biggerBoard = new Board(new Matrix("0002222",
+					     "0002002",
+					     "0000000"))
+
+      val move = new Move(new Player(2), new Piece("+",
+						   "++",
+						   " ++"), (0, 1))
+
+      assert(biggerBoard.isAdjacentToSelf(move.cells, move.player.color))
     }
 
     def testCornerCheck = {

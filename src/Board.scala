@@ -119,13 +119,13 @@ class Board (val matrix: Matrix) {
    */
   def isAdjacentToSelf(cells: List[Cell], color: Int): Boolean =
     cells.flatMap(_.neighbors).
-      map(matrix.present(_)).
+      map(matrix.value(_,0) == color).
       reduceLeft(_ || _)
 
   def isCornerToSelf(move: Move): Boolean = {
     (move.piece.corners.
      map(_.shift(move.cell)).
-     filter(matrix.present(_)).length > 0)
+     filter(matrix.value(_,0) == move.player.color).length > 0)
   }
 
   override def toString =

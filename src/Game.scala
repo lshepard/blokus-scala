@@ -6,7 +6,7 @@ package blokus {
  * then okay.
  */
 class Game (
-  var board: Board, 
+  var board: Board,
   val players: List[Player]) {
 
   /**
@@ -15,7 +15,7 @@ class Game (
    * (Yes, I know this could also be recursive, but ...
    * I'm lazy)
    */
-  def play {
+  def playPrint {
     while (!gameOver) {
       for (player <- players) {
 	val move = player.nextMove(board)

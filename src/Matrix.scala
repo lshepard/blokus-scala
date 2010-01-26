@@ -9,6 +9,9 @@ package blokus {
 class Matrix(var m: Array[Array[Int]]) {
   m = fillout
 
+  def this(l: List[List[Double]]) =
+    this(l.map(_.map(_.toInt).toArray).toArray)
+
   def width = m(0).length
   def height = m.length
 
@@ -183,7 +186,7 @@ class Matrix(var m: Array[Array[Int]]) {
 
 
   override def toString: String =
-    "[[" + m.map(_.mkString(", ")).mkString("]\n [") + "]]\n"
+    "[[" + m.map(_.mkString(", ")).mkString("],\n [") + "]]\n"
 
 }
 

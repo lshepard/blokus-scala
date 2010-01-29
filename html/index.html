@@ -9,11 +9,29 @@
 
 <h1>Blokus</h1>
 
-<p>
-<a href="#" onclick="blokus.getNextMove(); return false;">Get next move</a>
-</p>
+<div id="game">
 
-<div id="board">
+<form onsubmit="Blokus.initializeForm();">
+
+// choose the size
+
+<dt>Height:</dt><dd><input type="text" name="height" value="20" /></dd>
+<dt>Width: </dt><dd><input type="text" name="width" value="20" /></dd>
+<br />
+// choose the players
+
+Number of players:
+<select name="player_count">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+</select>
+
+<br />
+<input type="submit" value="Start game" />
+</form>
+
 </div>
 
 <script type="text/javascript" src="jquery.dev.js"></script>

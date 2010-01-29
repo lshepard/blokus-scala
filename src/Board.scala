@@ -134,6 +134,8 @@ class Board (val matrix: Matrix) {
       case _ => x
     }).mkString("")).mkString("\n")
 
+
+  def toJSON: String = matrix.m.toString
 }
 
 } // close package

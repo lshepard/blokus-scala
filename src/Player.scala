@@ -35,6 +35,13 @@ class Player (val color: Int,
     moves(rng.nextInt(moves.length))
   }
 
+  def toJSON: String = {
+    "{ \"color\": " + color + ", " +
+     " \"pieces\": [" + 
+    pieces.map(_.toJSON).mkString(", ") +
+    "]}"
+  }
+
   override def toString =
     "Player" + color + " with " + pieces.size + " pieces."
 }

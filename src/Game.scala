@@ -33,6 +33,10 @@ class Game (
    */
   def gameOver = !players.exists(board.possibleMoves(_).length > 0)
 
+  def toJSON = {
+    "{ \"board\": " + board.toString + 
+    ", \"players\": [" + players.mkString(", ") + "]}"
+  }
 }
 
 }

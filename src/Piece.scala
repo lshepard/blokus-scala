@@ -84,6 +84,8 @@ class Piece (val matrix: Matrix) {
     case _ => false
   }
 
+  def toJSON: String = matrix.m.toString
+
   override def toString: String =
     matrix.m.map(_.map(_ match {
       case 0 => " "
